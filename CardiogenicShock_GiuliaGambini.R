@@ -26,6 +26,7 @@ outcome[outcome == "failure"] <- "Failure" # To uniform the etiquettes
 time <- sub("time: ", "", pheno$characteristics_ch1.5)
 
 # 3. Filter the dataset: mantain only time 0 data
+
 idx_0hr <- which(time == "0hr")
 ex_0hr <- ex[, idx_0hr]
 outcome_0hr <- outcome[idx_0hr]
@@ -183,8 +184,6 @@ top150_idx <- head(geni_significativi, 150)
 ex_rf_mirata <- ex_rf[top150_idx, ]
 
 cat("Filter applied, genes:", nrow(ex_rf_mirata), "\n")
-
-
 
 # RANDOM FOREST on restricted data
 set.seed(1234)
@@ -591,4 +590,26 @@ plotVar(result.rcca.shock,
         cutoff = 0.2, 
         col = c("forestgreen", "darkorange"), 
         cex = c(1, 1.5))
+
+
+
+# WEEK 11: PLS (Partial Least Squares) Analysis
+
+# 1. PLS Analysis
+result.pls.shock <- pls(X, Y, ncomp = 2)
+
+# 2. Plot projection in the canonic variables subspace
+plotIndiv(result.pls.shock, 
+          group = outcome_0hr, 
+          col = c("indianred", "steelblue"), 
+          legend = TRUE, 
+          ind.names = TRUE,
+          title = 'Cardiogenic Shock: PLS')
+
+# 3. Plot Variables
+plotVar(result.pls.shock, 
+        cutoff = 0.5, 
+        col = c("forestgreen", "darkorange"), 
+        cex = c(1, 1.5),
+        title = 'Cardiogenic Shock: PLS Variable Correlation')
 
